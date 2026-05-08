@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"lab/processor"
+	"lab/lab1"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 	outputFile := "output.txt"
 
 	// Запускаем обработку файла через модуль processor.
-	messages, err := processor.ProcessFile(inputFile, outputFile)
+	messages, err := lab1.ProcessFile(inputFile, outputFile)
 
 	// Выводим все информационные сообщения и ошибки,
 	// которые были получены во время обработки.

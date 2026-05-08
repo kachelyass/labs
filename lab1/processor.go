@@ -1,4 +1,4 @@
-package processor
+package lab1
 
 import (
 	"fmt"
