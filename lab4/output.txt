@@ -1,0 +1,163 @@
+AST:
+Program
+├── Package: main
+├── ImportSection
+│   ├── Import: fmt
+│   └── Import: sync
+└── Functions
+    ├── FuncDecl: division
+    │   ├── Params
+    │   │   ├── Param: num1
+    │   │   │   └── Type: int
+    │   │   ├── Param: num2
+    │   │   │   └── Type: int
+    │   │   └── Param: results
+    │   │       └── Type: chan
+    │   │           └── Type: int
+    │   └── Block
+    │       ├── ShortVarDecl: result
+    │       │   └── BinaryExpr: /
+    │       │       ├── Identifier: num1
+    │       │       └── Identifier: num2
+    │       └── SendStmt
+    │           ├── Channel: results
+    │           └── Value
+    │               └── Identifier: result
+    └── FuncDecl: main
+        ├── Params
+        └── Block
+            ├── VarDecl: wg
+            │   └── Type: sync.WaitGroup
+            ├── ShortVarDecl: number1
+            │   └── IntLiteral: 6
+            ├── ShortVarDecl: number2
+            │   └── IntLiteral: 3
+            ├── ShortVarDecl: results
+            │   └── CallExpr
+            │       ├── Identifier: make
+            │       └── Args
+            │           └── Type: chan
+            │               └── Type: int
+            ├── ForRangeStmt
+            │   ├── Iterator: w
+            │   ├── RangeExpr
+            │   │   └── IntLiteral: 10
+            │   └── Block
+            │       ├── ExprStmt
+            │       │   └── CallExpr
+            │       │       ├── SelectorExpr
+            │       │       │   ├── Identifier: wg
+            │       │       │   └── Field: Add
+            │       │       └── Args
+            │       │           └── IntLiteral: 1
+            │       └── GoStmt
+            │           └── FuncLiteralCall
+            │               ├── FuncLiteral
+            │               │   ├── Params
+            │               │   │   └── Param: workerID
+            │               │   │       └── Type: int
+            │               │   └── Block
+            │               │       ├── DeferStmt
+            │               │       │   └── CallExpr
+            │               │       │       ├── SelectorExpr
+            │               │       │       │   ├── Identifier: wg
+            │               │       │       │   └── Field: Done
+            │               │       │       └── Args
+            │               │       └── IfStmt
+            │               │           ├── Condition
+            │               │           │   └── BinaryExpr: ==
+            │               │           │       ├── Identifier: number2
+            │               │           │       └── IntLiteral: 0
+            │               │           ├── Then
+            │               │           │   └── Block
+            │               │           │       └── ReturnStmt
+            │               │           └── Else
+            │               │               └── Block
+            │               │                   ├── ExprStmt
+            │               │                   │   └── CallExpr
+            │               │                   │       ├── Identifier: division
+            │               │                   │       └── Args
+            │               │                   │           ├── Identifier: number1
+            │               │                   │           ├── Identifier: number2
+            │               │                   │           └── Identifier: results
+            │               │                   └── ReturnStmt
+            │               └── Args
+            │                   └── Identifier: w
+            ├── GoStmt
+            │   └── FuncLiteralCall
+            │       ├── FuncLiteral
+            │       │   ├── Params
+            │       │   └── Block
+            │       │       ├── ExprStmt
+            │       │       │   └── CallExpr
+            │       │       │       ├── SelectorExpr
+            │       │       │       │   ├── Identifier: wg
+            │       │       │       │   └── Field: Wait
+            │       │       │       └── Args
+            │       │       └── ExprStmt
+            │       │           └── CallExpr
+            │       │               ├── Identifier: close
+            │       │               └── Args
+            │       │                   └── Identifier: results
+            │       └── Args
+            └── ForRangeStmt
+                ├── Iterator: result
+                ├── RangeExpr
+                │   └── Identifier: results
+                └── Block
+                    └── ExprStmt
+                        └── CallExpr
+                            ├── SelectorExpr
+                            │   ├── Identifier: fmt
+                            │   └── Field: Println
+                            └── Args
+                                └── Identifier: result
+
+Таблица символов:
+Имя            | Вид        | Тип                    | Область            | Объявлена   | Инициализирована | Строка
+----------------------------------------------------------------------------------------------------------------------
+w              | variable   | int                    | for:1              | true        | true             | 19    
+result         | variable   | int                    | for:6              | true        | true             | 37    
+num1           | param      | int                    | func:division      | true        | true             | 8     
+num2           | param      | int                    | func:division      | true        | true             | 8     
+result         | variable   | int                    | func:division      | true        | true             | 9     
+results        | param      | chan int               | func:division      | true        | true             | 8     
+number1        | variable   | int                    | func:main          | true        | true             | 15    
+number2        | variable   | int                    | func:main          | true        | true             | 16    
+results        | variable   | chan int               | func:main          | true        | true             | 17    
+wg             | variable   | sync.WaitGroup         | func:main          | true        | true             | 14    
+workerID       | param      | int                    | func_literal:2     | true        | true             | 21    
+division       | function   | func(int, int, chan int) void | global             | true        | true             | 8     
+fmt            | import     | fmt                    | global             | true        | true             | 4     
+main           | function   | func() void            | global             | true        | true             | 13    
+sync           | import     | sync                   | global             | true        | true             | 5     
+
+Семантический анализ завершён успешно. Ошибок не найдено.
+
+Триады:
+1) (/, num1, num2)
+2) (:=, result, ^1)
+3) (<-, results, result)
+4) (:=, number1, 6)
+5) (:=, number2, 3)
+6) (call, make, chan int)
+7) (:=, results, ^6)
+8) (range, w, 10)
+9) (call, wg.Add, 1)
+10) (call, wg.Done, )
+11) (defer, ^10, -)
+12) (==, number2, 0)
+13) (if, ^12, then)
+14) (return, -, -)
+15) (else, -, -)
+16) (call, division, number1, number2, results)
+17) (return, -, -)
+18) (endif, -, -)
+19) (call, func_literal, w)
+20) (go, ^19, -)
+21) (call, wg.Wait, )
+22) (call, close, results)
+23) (call, func_literal, )
+24) (go, ^23, -)
+25) (range, result, results)
+26) (call, fmt.Println, result)
