@@ -1585,6 +1585,15 @@ func isNumeric(typ string) bool {
 }
 
 func loadSource() string {
+	if len(os.Args) > 1 {
+		data, err := os.ReadFile(os.Args[1])
+		if err != nil {
+			fmt.Printf("Ошибка: не удалось открыть файл %s: %v\n", os.Args[1], err)
+			os.Exit(1)
+		}
+		return string(data)
+	}
+
 	paths := []string{
 		"../lab1/output.txt",
 		"lab1/output.txt",
@@ -1599,7 +1608,7 @@ func loadSource() string {
 		}
 	}
 	fmt.Println("Ошибка: не удалось открыть исходный файл.")
-	fmt.Println("Положи очищенный lab1/output.txt рядом с проектом или запусти из папки lab4 внутри репозитория.")
+	fmt.Println("Положи очищенный lab1/output.txt рядом с проектом или передай путь: go run . ../lab1/output.txt")
 	os.Exit(1)
 	return ""
 }

@@ -1,0 +1,37 @@
+AST:
+Program
+├── Package: main
+├── ImportSection
+│   └── Import: fmt
+└── Functions
+    └── FuncDecl: main
+        ├── Params
+        └── Block
+            ├── ShortVarDecl: number1
+            │   └── IntLiteral: 6
+            ├── ExprStmt
+            │   └── CallExpr
+            │       ├── SelectorExpr
+            │       │   ├── Identifier: fmt
+            │       │   └── Field: Println
+            │       └── Args
+            │           └── Identifier: unknownValue
+            └── AssignStmt
+                ├── Identifier: number1
+                └── StringLiteral: "text"
+
+Таблица символов:
+Имя            | Вид        | Тип                    | Область            | Объявлена   | Инициализирована | Строка
+----------------------------------------------------------------------------------------------------------------------
+number1        | variable   | int                    | func:main          | true        | true             | 6     
+fmt            | import     | fmt                    | global             | true        | true             | 3     
+main           | function   | func() void            | global             | true        | true             | 5     
+
+Семантический анализ завершён с ошибками. Найдено ошибок: 2.
+НЕОБЪЯВЛЕННАЯ ПЕРЕМЕННАЯ: идентификатор "unknownValue" используется до объявления (строка 7)
+НЕСООТВЕТСТВИЕ ТИПОВ: левой части типа int нельзя присвоить выражение типа string (строка 8)
+
+Триады:
+1) (:=, number1, 6)
+2) (call, fmt.Println, unknownValue)
+3) (=, number1, "text")
